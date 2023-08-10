@@ -5,7 +5,8 @@ import neat
 import pygame
 
 from Pong import Game
-from Pong import Button
+from images.button_call import quit_button, one_button, two_button
+
 
 class PongGame:
     def __init__(self, window, width, height):
@@ -34,7 +35,6 @@ class PongGame:
                 self.game.move_paddle(left=False, up=True)
             if keys[pygame.K_k]:
                 self.game.move_paddle(left=False, up=False)
-
 
             game_info = self.game.loop()
             self.game.draw(True, False)
@@ -166,6 +166,35 @@ def two_player():
     game.test_game()
 
 
+def main_menu():
+    width, height = 700, 500
+
+    window = pygame.display.set_mode((width, height))
+    game = PongGame(window, width, height)
+
+    pygame.display.set_caption("Main Menu")
+    playing = True
+
+    while playing:
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                break
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if one_button.find(window):
+                    one_player(config)
+                if two_button.find(window):
+                    two_player()
+                if quit_button.find(window):
+                    pygame.quit()
+                    break
+
+        pygame.display.update()
+
+    pygame.quit()
+
+
 if __name__ == "__main__":
     local_directory = os.path.dirname(__file__)
     config_path = os.path.join(local_directory, "config.txt")
@@ -174,4 +203,5 @@ if __name__ == "__main__":
                          config_path)
     # run_neat(config)
     # one_player(config)
-    two_player()
+    # two_player()
+    main_menu()
