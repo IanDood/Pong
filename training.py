@@ -3,6 +3,7 @@ from Pong import Game
 import neat
 import os
 import pickle
+import button
 
 
 class PongGame:
@@ -117,7 +118,7 @@ def run_neat(config):
         pickle.dump(winner, f)
 
 
-def test_ai(config):
+def two_player(config):
     width, height = 700, 500
     window = pygame.display.set_mode((width, height))
 
@@ -135,4 +136,4 @@ if __name__ == "__main__":
     config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction, neat.DefaultSpeciesSet, neat.DefaultStagnation,
                          config_path)
     # run_neat(config)
-    test_ai(config)
+    two_player(config)
