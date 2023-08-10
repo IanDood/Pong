@@ -158,7 +158,7 @@ def one_player(config):
     game.test_ai(winner, config)
 
 
-def two_player(config):
+def two_player():
     width, height = 700, 500
     window = pygame.display.set_mode((width, height))
 
