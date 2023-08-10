@@ -1,10 +1,11 @@
-import pygame
-from Pong import Game
-import neat
 import os
 import pickle
-import button
 
+import neat
+import pygame
+
+from Pong import Game
+from
 
 class PongGame:
     def __init__(self, window, width, height):
