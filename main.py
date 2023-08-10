@@ -5,7 +5,11 @@ import neat
 import pygame
 
 from Pong import Game
-from images.button_call import quit_button, one_button, two_button
+from Pong import button
+
+# Initialize Pygame
+pygame.init()
+pygame.display.init()
 
 
 class PongGame:
@@ -24,6 +28,9 @@ class PongGame:
                 if event.type == pygame.QUIT:
                     playing = False
                     break
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        main_menu()
 
             keys = pygame.key.get_pressed()
             if keys[pygame.K_w]:
@@ -53,6 +60,9 @@ class PongGame:
                 if event.type == pygame.QUIT:
                     playing = False
                     break
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        main_menu()
 
             keys = pygame.key.get_pressed()
             if keys[pygame.K_w]:
@@ -151,6 +161,8 @@ def one_player(config):
     width, height = 700, 500
     window = pygame.display.set_mode((width, height))
 
+    pygame.display.set_caption("P1 vs CPU")
+
     with open("best.pickle", "rb") as f:
         winner = pickle.load(f)
 
@@ -162,6 +174,8 @@ def two_player():
     width, height = 700, 500
     window = pygame.display.set_mode((width, height))
 
+    pygame.display.set_caption("P1 vs P2")
+
     game = PongGame(window, width, height)
     game.test_game()
 
@@ -170,12 +184,21 @@ def main_menu():
     width, height = 700, 500
 
     window = pygame.display.set_mode((width, height))
-    game = PongGame(window, width, height)
 
     pygame.display.set_caption("Main Menu")
     playing = True
 
     while playing:
+
+        # Load Images
+        one_img = pygame.image.load("images/button_one.png").convert_alpha()
+        two_img = pygame.image.load("images/button_two.png").convert_alpha()
+        quit_img = pygame.image.load("images/button_quit.png").convert_alpha()
+
+        # Create button instances
+        one_button = button.Button(196, 85, one_img, 1)
+        two_button = button.Button(196, 209, two_img, 1)
+        quit_button = button.Button(286, 333, quit_img, 1)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -192,8 +215,6 @@ def main_menu():
 
         pygame.display.update()
 
-    pygame.quit()
-
 
 if __name__ == "__main__":
     local_directory = os.path.dirname(__file__)
@@ -202,6 +223,7 @@ if __name__ == "__main__":
     config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction, neat.DefaultSpeciesSet, neat.DefaultStagnation,
                          config_path)
     # run_neat(config)
-    # one_player(config)
-    # two_player()
+
     main_menu()
+
+    pygame.quit()
