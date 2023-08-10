@@ -5,7 +5,7 @@ import neat
 import pygame
 
 from Pong import Game
-from
+from Pong import Button
 
 class PongGame:
     def __init__(self, window, width, height):
@@ -13,6 +13,34 @@ class PongGame:
         self.left_paddle = self.game.left_paddle
         self.right_paddle = self.game.right_paddle
         self.ball = self.game.ball
+
+    def test_game(self):
+        playing = True
+        clock = pygame.time.Clock()
+        while playing:
+            clock.tick(60)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    playing = False
+                    break
+
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_w]:
+                self.game.move_paddle(left=True, up=True)
+            if keys[pygame.K_s]:
+                self.game.move_paddle(left=True, up=False)
+
+            if keys[pygame.K_i]:
+                self.game.move_paddle(left=False, up=True)
+            if keys[pygame.K_k]:
+                self.game.move_paddle(left=False, up=False)
+
+
+            game_info = self.game.loop()
+            self.game.draw(True, False)
+            pygame.display.update()
+
+        pygame.quit()
 
     def test_ai(self, genome, config):
         net = neat.nn.FeedForwardNetwork.create(genome, config)
@@ -119,7 +147,7 @@ def run_neat(config):
         pickle.dump(winner, f)
 
 
-def two_player(config):
+def one_player(config):
     width, height = 700, 500
     window = pygame.display.set_mode((width, height))
 
@@ -130,6 +158,14 @@ def two_player(config):
     game.test_ai(winner, config)
 
 
+def two_player(config):
+    width, height = 700, 500
+    window = pygame.display.set_mode((width, height))
+
+    game = PongGame(window, width, height)
+    game.test_game()
+
+
 if __name__ == "__main__":
     local_directory = os.path.dirname(__file__)
     config_path = os.path.join(local_directory, "config.txt")
@@ -137,4 +173,5 @@ if __name__ == "__main__":
     config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction, neat.DefaultSpeciesSet, neat.DefaultStagnation,
                          config_path)
     # run_neat(config)
-    two_player(config)
+    # one_player(config)
+    two_player()
