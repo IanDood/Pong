@@ -7,10 +7,6 @@ import pygame
 from Pong import Game
 from Pong import button
 
-# Initialize Pygame
-pygame.init()
-pygame.display.init()
-
 
 class PongGame:
     def __init__(self, window, width, height):
@@ -217,6 +213,10 @@ def main_menu():
 
 
 if __name__ == "__main__":
+    # Initialize Pygame
+    pygame.init()
+    pygame.display.init()
+
     local_directory = os.path.dirname(__file__)
     config_path = os.path.join(local_directory, "config.txt")
 
