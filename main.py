@@ -1,11 +1,16 @@
 import os
 import pickle
+import time
 
+import smbus
 import neat
 import pygame
 
 from Pong import Game
 from Pong import button
+
+NUNCHUCK_DEVICE = 0x52
+bus = smbus.SMBus(1)
 
 
 class PongGame:
@@ -14,6 +19,18 @@ class PongGame:
         self.left_paddle = self.game.left_paddle
         self.right_paddle = self.game.right_paddle
         self.ball = self.game.ball
+
+    def read_nunchuck_data(self):
+        bus.write_byte_data(NUNCHUCK_DEVICE, 0x40, 0x00)
+        time.sleep(0.1)
+
+        bus.write_byte(NUNCHUCK_DEVICE, 0x00)
+        time.sleep(0.1)
+
+        bytes = [bus.read_byte(NUNCHUCK_DEVICE) for _ in range(6)]
+
+        joyY = bytes[1]
+        return joyY
 
     def test_game(self):
         playing = True
@@ -29,10 +46,14 @@ class PongGame:
                         main_menu()
 
             keys = pygame.key.get_pressed()
-            if keys[pygame.K_w]:
+            if joyY > 160:
                 self.game.move_paddle(left=True, up=True)
-            if keys[pygame.K_s]:
+            if joyY < 50:
                 self.game.move_paddle(left=True, up=False)
+            # if keys[pygame.K_w]:
+            #     self.game.move_paddle(left=True, up=True)
+            # if keys[pygame.K_s]:
+            #     self.game.move_paddle(left=True, up=False)
 
             if keys[pygame.K_i]:
                 self.game.move_paddle(left=False, up=True)
@@ -61,10 +82,14 @@ class PongGame:
                         main_menu()
 
             keys = pygame.key.get_pressed()
-            if keys[pygame.K_w]:
+            if joyY > 160:
                 self.game.move_paddle(left=True, up=True)
-            if keys[pygame.K_s]:
+            if joyY < 50:
                 self.game.move_paddle(left=True, up=False)
+            # if keys[pygame.K_w]:
+            #     self.game.move_paddle(left=True, up=True)
+            # if keys[pygame.K_s]:
+            #     self.game.move_paddle(left=True, up=False)
 
             output = net.activate((self.right_paddle.y, self.ball.y, abs(self.right_paddle.x - self.ball.x)))
             decision = output.index(max(output))
