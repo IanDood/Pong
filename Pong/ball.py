@@ -25,7 +25,7 @@ class Ball:
         return angle
 
     def draw(self, window):
-        pygame.draw.circle(window, (60, 255, 116), (self.x, self.y), self.RADIUS)
+        pygame.draw.circle(window, (60, 255, 116), (int(self.x), int(self.y)), self.RADIUS)
 
     def move(self):
         self.x += self.x_velocity
